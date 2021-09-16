@@ -17,6 +17,7 @@ public class ReCaptcha {
         struct InfoDictKeys {
             static let APIKey = "ReCaptchaKey"
             static let Domain = "ReCaptchaDomain"
+            static let Theme = "ReCaptchaTheme"
         }
     }
 
@@ -51,6 +52,9 @@ public class ReCaptcha {
         /// The API key that will be sent to the ReCaptcha API
         let apiKey: String
 
+        /// The color theme of the rendered ReCaptcha view
+        let theme: String
+
         /// The base url to be used to resolve relative URLs in the webview
         let baseURL: URL
 
@@ -80,7 +84,7 @@ public class ReCaptcha {
          Info.plist.
          - Throws: Rethrows any exceptions thrown by `String(contentsOfFile:)`
          */
-        public init(apiKey: String?, infoPlistKey: String?, baseURL: URL?, infoPlistURL: URL?) throws {
+        public init(apiKey: String?, infoPlistKey: String?, baseURL: URL?, infoPlistURL: URL?, theme: String?, infoPlistTheme: String?) throws {
             guard let filePath = Config.bundle.path(forResource: "recaptcha", ofType: "html") else {
                 throw ReCaptchaError.htmlLoadError
             }
@@ -93,10 +97,16 @@ public class ReCaptcha {
                 throw ReCaptchaError.baseURLNotFound
             }
 
+            /// Fall back to light theme in case it's not specified
+            guard let theme = theme ?? infoPlistTheme else {
+                let theme = "light"
+            }
+
             let rawHTML = try String(contentsOfFile: filePath)
 
             self.html = rawHTML
             self.apiKey = apiKey
+            self.theme = theme
             self.baseURL = Config.fixSchemeIfNeeded(for: domain)
         }
     }
@@ -127,6 +137,7 @@ public class ReCaptcha {
      */
     public convenience init(
         apiKey: String? = nil,
+        theme: String? = nil,
         baseURL: URL? = nil,
         endpoint: Endpoint = .default,
         locale: Locale? = nil
@@ -135,12 +146,14 @@ public class ReCaptcha {
 
         let plistApiKey = infoDict?[Constants.InfoDictKeys.APIKey] as? String
         let plistDomain = (infoDict?[Constants.InfoDictKeys.Domain] as? String).flatMap(URL.init(string:))
+        let PlistTheme = infoDict?[Constants.InfoDictKeys.Theme] as? String
 
-        let config = try Config(apiKey: apiKey, infoPlistKey: plistApiKey, baseURL: baseURL, infoPlistURL: plistDomain)
+        let config = try Config(apiKey: apiKey, infoPlistKey: plistApiKey, baseURL: baseURL, infoPlistURL: plistDomain, theme: theme, infoPlistTheme: plistTheme,)
 
         self.init(manager: ReCaptchaWebViewManager(
             html: config.html,
             apiKey: config.apiKey,
+            theme: config.theme,
             baseURL: config.baseURL,
             endpoint: endpoint.getURL(locale: locale)
         ))

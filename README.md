@@ -76,7 +76,8 @@ func validate() {
 If instead you prefer to keep the information out of the Info.plist, you can use:
 ``` swift
 let recaptcha = try? ReCaptcha(
-    apiKey: "YOUR_RECAPTCHA_KEY", 
+    apiKey: "YOUR_RECAPTCHA_KEY",
+    theme: "ligth" / "dark", 
     baseURL: URL(string: "YOUR_RECAPTCHA_DOMAIN")!
 )
 
