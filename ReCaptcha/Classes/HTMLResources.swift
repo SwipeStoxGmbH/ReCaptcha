@@ -93,6 +93,7 @@ struct HTMLResources {
       var onloadCallback = function() {
         grecaptcha.render("submit", {
           sitekey: "${apiKey}",
+          theme: "${theme}",
           callback: function(token) {
             console.log(token);
             post({ token });
