@@ -1,3 +1,16 @@
+//
+//  HTMLResources.swift
+//  
+//
+//  Created by Alexander Eichhorn on 13.12.19.
+//
+
+import Foundation
+
+
+struct HTMLResources {
+    
+    static let main = #"""
 <html>
   <head>
     <meta name="viewport" content="width=device-width" />
@@ -16,7 +29,7 @@
 
       @media (prefers-color-scheme: dark) {
         body {
-          background: rgb(0,0,0);
+          background: rgb(28,28,30);
         }
       }
     </style>
@@ -80,7 +93,6 @@
       var onloadCallback = function() {
         grecaptcha.render("submit", {
           sitekey: "${apiKey}",
-          theme: "${theme}",
           callback: function(token) {
             console.log(token);
             post({ token });
@@ -120,3 +132,6 @@
     <script src="${endpoint}" async defer></script>
   </body>
 </html>
+"""#
+    
+}
