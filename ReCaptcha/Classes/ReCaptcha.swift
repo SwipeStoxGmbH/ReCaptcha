@@ -146,9 +146,9 @@ public class ReCaptcha {
 
         let plistApiKey = infoDict?[Constants.InfoDictKeys.APIKey] as? String
         let plistDomain = (infoDict?[Constants.InfoDictKeys.Domain] as? String).flatMap(URL.init(string:))
-        let PlistTheme = infoDict?[Constants.InfoDictKeys.Theme] as? String
+        let plistTheme = infoDict?[Constants.InfoDictKeys.Theme] as? String
 
-        let config = try Config(apiKey: apiKey, infoPlistKey: plistApiKey, baseURL: baseURL, infoPlistURL: plistDomain, theme: theme, infoPlistTheme: plistTheme,)
+        let config = try Config(apiKey: apiKey, infoPlistKey: plistApiKey, baseURL: baseURL, infoPlistURL: plistDomain, theme: theme, infoPlistTheme: plistTheme)
 
         self.init(manager: ReCaptchaWebViewManager(
             html: config.html,
